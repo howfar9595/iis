@@ -1,0 +1,93 @@
+using AutoIIS.Helper;
+using Microsoft.Web.Administration;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+ 
+namespace AutoIIS
+{
+    public partial class Index : Form
+    {
+        public Index()
+        {
+            InitializeComponent();
+        }
+ 
+        private void Index_Load(object sender, EventArgs e)
+        {
+ 
+        }
+        //添加默认页
+        private void button1_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Text += IISHelper.AddDefaultDocument("苏飞论坛", txtdefault.Text.Trim());
+        }
+ 
+        //创建网站
+        private void button2_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Text += IISHelper.CreateSite(txtsite.Text.Trim(), txtdomain.Text.Trim(), txtfile.Text.Trim());
+        }
+        //删除默认文档
+        private void button3_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Text += IISHelper.DeleteDefaultDocument("苏飞论坛", txtdefault.Text.Trim());
+        }
+        //删除网站
+        private void button4_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Text += IISHelper.DeleteSite(txtsite.Text.Trim());
+        }
+        //删除
+        private void button6_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Text += IISHelper.DeleteVDir(txtsite.Text.Trim(), txtxuniname.Text.Trim());
+        }
+        //添加
+        private void button5_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Text += IISHelper.CreateVDir(txtsite.Text.Trim(), txtxuniname.Text.Trim(), txtxunipath.Text.Trim());
+        }
+        //启动
+        private void button7_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Text += IISHelper.Start(txtsite.Text.Trim());
+        }
+        //暂停
+        private void button8_Click(object sender, EventArgs e)
+        {
+            richTextBox1.Text += IISHelper.Stop(txtsite.Text.Trim());
+        }
+ 
+        private void button9_Click(object sender, EventArgs e)
+        {
+            Site site = IISHelper.GetSiteInfo(txtsite.Text.Trim());
+            richTextBox1.Text += "网站名：" + site.Name + "\r\n";
+            richTextBox1.Text += "网站状态：" + site.State.ToString() + "\r\n";
+            foreach (var item in site.Bindings)
+            {
+                richTextBox1.Text += "host：" + item.Host + "\r\n";
+                richTextBox1.Text += "bind：" + item.BindingInformation.ToString() + "\r\n";
+            }
+ 
+            richTextBox1.Text += "网站状态：" + site.Applications.ToString().ToString() + "\r\n";
+        }
+        //添加
+        private void button10_Click(object sender, EventArgs e)
+        {
+            string[] strlist = txtdomain.Text.Trim().Split(':');
+            richTextBox1.Text += IISHelper.AddHostBinding(txtsite.Text.Trim(), strlist[0], strlist[1], strlist[2]);
+        }
+        //删除
+        private void button11_Click(object sender, EventArgs e)
+        {
+            string[] strlist = txtdomain.Text.Trim().Split(':');
+            richTextBox1.Text += IISHelper.DeleteHostBinding(txtsite.Text.Trim(), strlist[0], strlist[1], strlist[2]);
+        }
+    }
+}
